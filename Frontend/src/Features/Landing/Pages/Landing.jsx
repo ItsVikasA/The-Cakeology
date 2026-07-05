@@ -1,6 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import useHideOnScroll from '../../../Shared/hooks/useHideOnScroll';
+import useCatalog from '../../Catalog/Hook/useCatalog';
 import Wave from '../components/Wave';
 import Sparkle from '../components/Sparkle';
 import ScrollSequenceHero from '../components/ScrollSequenceHero';
@@ -13,15 +15,23 @@ const CREAM = '#F9E0D6';
 const PEACH = '#F9E0D6';
 const GREEN = '#5A1A2B';
 
-// "Shop by occasion" — helps visitors jump straight to the cake for their moment.
-const OCCASIONS = [
-    { emoji: '🎂', title: 'Birthdays', desc: 'Make their day unforgettable', to: '/shop' },
-    { emoji: '💍', title: 'Weddings', desc: 'Elegant tiers for the big day', to: '/shop' },
-    { emoji: '❤️', title: 'Anniversaries', desc: 'Celebrate years of love', to: '/shop' },
-    { emoji: '👶', title: 'Baby Showers', desc: 'Sweet welcomes for little ones', to: '/shop' },
-    { emoji: '🧸', title: 'Kids & Cartoon', desc: 'Playful themes they’ll adore', to: '/shop' },
-    { emoji: '🎨', title: 'Custom Creations', desc: 'Designed just the way you dream', to: '/customCake' },
-];
+// Emoji + tagline shown on each category card. Keyed by category slug; any
+// category without an entry falls back to DEFAULT_META so newly-added
+// categories still render nicely without a code change.
+const CATEGORY_META = {
+    'birthday-cake': { emoji: '🎂', desc: 'Make their day unforgettable' },
+    'wedding-cake': { emoji: '💍', desc: 'Elegant tiers for the big day' },
+    'anniversary-cake': { emoji: '❤️', desc: 'Celebrate years of love' },
+    'cupcakes': { emoji: '🧁', desc: 'Little treats, big smiles' },
+    'cheesecake': { emoji: '🍰', desc: 'Rich, creamy indulgence' },
+    'brownies': { emoji: '🍫', desc: 'Fudgy chocolate squares' },
+    'cookies': { emoji: '🍪', desc: 'Freshly baked crunch' },
+    'pastry': { emoji: '🥐', desc: 'Flaky, buttery delights' },
+    'bentocakes': { emoji: '🍱', desc: 'Cute mini lunchbox cakes' },
+    'bento-cakes': { emoji: '🍱', desc: 'Cute mini lunchbox cakes' },
+    'custom-cake': { emoji: '🎨', desc: 'Designed just the way you dream' },
+};
+const DEFAULT_META = { emoji: '🎂', desc: 'Freshly baked, just for you' };
 
 // Gold / muted star row for a review's rating.
 const Stars = ({ count }) => (
@@ -82,8 +92,32 @@ const Landing = () => {
     const hidden = useHideOnScroll();
     const products = useSelector((state) => state.products.AllProducts) || [];
     const User = useSelector((state) => state.auth.User);
+    const { getCategoriesHandler } = useCatalog();
     // Admins/sellers don't shop — hide the Custom Cake link for them.
     const isStaff = User && (User.role === 'admin' || User.role === 'seller');
+
+    // Live categories from the catalog — top-level only (subcategories are
+    // reached from inside the shop). Each becomes a "Shop by occasion" card.
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        getCategoriesHandler()
+            .then((c) => setCategories((Array.isArray(c) ? c : []).filter((cat) => !cat?.parent)))
+            .catch(() => setCategories([]));
+    }, []);
+
+    // Custom-cake categories route to the design flow; everything else opens
+    // the shop pre-filtered to that category (e.g. /shop?category=birthday-cake).
+    const occasions = categories.map((cat) => {
+        const meta = CATEGORY_META[cat.slug] || DEFAULT_META;
+        const isCustom = String(cat.slug || '').includes('custom');
+        return {
+            key: cat._id || cat.slug,
+            emoji: meta.emoji,
+            title: cat.name,
+            desc: meta.desc,
+            to: isCustom ? '/customCake' : `/shop?category=${encodeURIComponent(cat.slug)}`,
+        };
+    });
 
     const heroImage = products.find((p) => p?.images?.length)?.images?.[0] || '/1.jpeg';
 
@@ -230,10 +264,10 @@ const Landing = () => {
                         Cakes for Every Occasion
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-6">
-                        {OCCASIONS.map((o) => (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
+                        {occasions.map((o) => (
                             <button
-                                key={o.title}
+                                key={o.key}
                                 onClick={() => navigate(o.to)}
                                 className="group relative bg-white/95 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center
                                            ring-1 ring-[#5A1A2B]/10 shadow-sm hover:shadow-xl hover:-translate-y-1.5

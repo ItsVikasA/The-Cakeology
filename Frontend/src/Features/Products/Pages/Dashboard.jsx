@@ -66,6 +66,13 @@ const Dashboard = () => {
         if (q !== null) setSearch(q);
     }, [searchParams]);
 
+    // Preselect a category from a ?category=<slug> query param (set by the
+    // landing "Shop by occasion" cards) so e.g. Birthday Cake opens filtered.
+    useEffect(() => {
+        const cat = searchParams.get('category');
+        if (cat) setSelectedCategory(cat);
+    }, [searchParams]);
+
     // Auto-rotate the hero banners.
     useEffect(() => {
         if (banners.length <= 1) return;
