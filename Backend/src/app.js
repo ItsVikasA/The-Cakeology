@@ -42,6 +42,7 @@ const allowedOrigins = [
     'https://www.cakeology.com',
     'https://cakeology.com',
     'https://cakeology.onrender.com',
+    'https://the-cakeology-1.onrender.com',
 ].filter(Boolean);
 
 app.use(cors({

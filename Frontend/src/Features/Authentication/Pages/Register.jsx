@@ -13,6 +13,7 @@ const Register = () => {
     role: 'buyer',
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const validate = () => {
@@ -74,7 +75,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    await registerHandler(formData);
+    const result = await registerHandler(formData);
+    if (!result?.success) {
+      setSubmitError(result?.message || 'Unable to create account');
+      return;
+    }
+    setSubmitError('');
     // New users land on the home (Landing) page — except a guest who was headed
     // to the custom-cake form, who is returned there to complete their request.
     const dest = sessionStorage.getItem('postLoginRedirect');
@@ -166,6 +172,11 @@ const Register = () => {
           </p>
 
           <form onSubmit={handleSubmit} noValidate>
+            {submitError && (
+              <div className="mb-5 rounded border border-[#d9383a]/20 bg-[#d9383a]/8 px-4 py-3 text-[12px] text-[#b42b2d]">
+                {submitError}
+              </div>
+            )}
             {fields.map((field, index) => {
               const isPasswordField = field.name === 'password';
               const inputType = isPasswordField ? (showPassword ? 'text' : 'password') : field.type;

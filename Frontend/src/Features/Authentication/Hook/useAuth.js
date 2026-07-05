@@ -12,8 +12,15 @@ const useAuth = () => {
             if (userData.token) localStorage.setItem('token', userData.token);
             dispatch(setUser(userData.user));
             dispatch(setLoading(true));
+            return { success: true };
         } catch (error) {
-            console.error("Register Error: ", error);
+            const message = error?.response?.data?.message
+                || error?.response?.data?.error
+                || error?.response?.data?.errors?.[0]?.msg
+                || error?.message
+                || 'Unable to create account';
+            console.error("Register Error: ", message);
+            return { success: false, message };
         }
         finally {
             dispatch(setLoading(false));
