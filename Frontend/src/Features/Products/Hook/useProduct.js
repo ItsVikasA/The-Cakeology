@@ -69,9 +69,15 @@ const useProduct = () => {
     }
 
     const ProductsHandler = async () => {
-        const ProductsData = await getProductsApi();
-        dispatch(setAllProducts(ProductsData.products));
-        dispatch(setLoading(false));
+        try {
+            const ProductsData = await getProductsApi();
+            dispatch(setAllProducts(ProductsData.products));
+        } catch (error) {
+            console.error('Failed to load products:', error?.response?.data || error);
+            dispatch(setAllProducts([]));
+        } finally {
+            dispatch(setLoading(false));
+        }
     }
 
     const ProductHandler = async ({ productId }) => {

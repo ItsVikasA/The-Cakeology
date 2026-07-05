@@ -1,8 +1,9 @@
 import axios from 'axios';
 import withAuth from '../../../Shared/withAuth';
+import { getApiBaseUrl } from '../../../Shared/apiBase';
 
 const api = withAuth(axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}/products`,
+  baseURL: `${getApiBaseUrl()}/products`,
   withCredentials: true,
 }));
 
