@@ -81,11 +81,24 @@ const Register = () => {
       return;
     }
     setSubmitError('');
-    // New users land on the home (Landing) page — except a guest who was headed
-    // to the custom-cake form, who is returned there to complete their request.
     const dest = sessionStorage.getItem('postLoginRedirect');
     sessionStorage.removeItem('postLoginRedirect');
-    navigate(dest === '/customCake' ? '/customCake' : '/');
+    if (dest === '/customCake') {
+      navigate('/customCake');
+      return;
+    }
+
+    if (result?.user?.role === 'admin') {
+      navigate('/admin');
+      return;
+    }
+
+    if (result?.user?.role === 'seller') {
+      navigate('/product/dashboard');
+      return;
+    }
+
+    navigate('/');
   };
 
   const perks = [

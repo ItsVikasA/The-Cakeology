@@ -45,11 +45,24 @@ const Login = () => {
     setSubmitting(false);
 
     if (result?.success) {
-      // Everyone lands on the home (Landing) page after logging in — except a
-      // guest who was headed to the custom-cake form, who is returned there.
       const dest = sessionStorage.getItem('postLoginRedirect');
       sessionStorage.removeItem('postLoginRedirect');
-      navigate(dest === '/customCake' ? '/customCake' : '/');
+      if (dest === '/customCake') {
+        navigate('/customCake');
+        return;
+      }
+
+      if (result?.user?.role === 'admin') {
+        navigate('/admin');
+        return;
+      }
+
+      if (result?.user?.role === 'seller') {
+        navigate('/product/dashboard');
+        return;
+      }
+
+      navigate('/');
       return;
     }
 

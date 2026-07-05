@@ -12,7 +12,7 @@ const useAuth = () => {
             if (userData.token) localStorage.setItem('token', userData.token);
             dispatch(setUser(userData.user));
             dispatch(setLoading(true));
-            return { success: true };
+            return { success: true, user: userData.user };
         } catch (error) {
             const message = error?.response?.data?.message
                 || error?.response?.data?.error
@@ -34,7 +34,7 @@ const useAuth = () => {
             if (userData.token) localStorage.setItem('token', userData.token);
             dispatch(setUser(userData.user));
             dispatch(setLoading(true));
-            return { success: true };
+            return { success: true, user: userData.user };
         } catch (error) {
             const message = error?.response?.data?.message
                 || error?.response?.data?.error
