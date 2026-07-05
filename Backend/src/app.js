@@ -34,7 +34,9 @@ const index = path.join(__dirname, '../', 'public/dist');
 app.use(morgan("dev"));
 app.use(express.static(index))
 
-// Allow the configured client(s) plus local dev and the deployed apps.
+// Allow local dev plus any Render-hosted frontend subdomain. Render assigns
+// different *.onrender.com hosts across services / redeploys, so a hardcoded
+// single origin can silently block auth requests.
 const allowedOrigins = [
     process.env.CLIENT_URL,
     process.env.FRONTEND_URL,
@@ -42,6 +44,7 @@ const allowedOrigins = [
     'https://www.cakeology.com',
     'https://cakeology.com',
     'https://cakeology.onrender.com',
+    'https://the-cakeology.onrender.com',
     'https://the-cakeology-1.onrender.com',
 ].filter(Boolean);
 
@@ -52,6 +55,17 @@ app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true); // curl / same-origin / mobile
         if (allowedOrigins.includes(origin)) return callback(null, true);
+        try {
+            const hostname = new URL(origin).hostname;
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                return callback(null, true);
+            }
+            if (hostname.endsWith('.onrender.com')) {
+                return callback(null, true);
+            }
+        } catch {
+            // fall through to explicit rejection below
+        }
         if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return callback(null, true);
         return callback(new Error(`Not allowed by CORS: ${origin}`));
     },
