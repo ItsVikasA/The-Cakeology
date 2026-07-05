@@ -4,20 +4,20 @@ const PROD_API_URL = 'https://the-cakeology.onrender.com/api';
 const normalizeBaseUrl = (value) => value.replace(/\/$/, '');
 
 export const getApiBaseUrl = () => {
-    const configured = import.meta.env.VITE_API_URL?.trim();
-    const isLocalhost = typeof window !== 'undefined'
-        && /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
-
-    if (configured && /^(localhost|127\.0\.0\.1)/.test(configured) && !isLocalhost) {
+    if (typeof window === 'undefined') {
         return PROD_API_URL;
     }
 
-    if (configured) {
-        return normalizeBaseUrl(configured);
+    const hostname = window.location.hostname;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+    if (isLocalhost) {
+        return LOCAL_API_URL;
     }
 
-    if (typeof window !== 'undefined') {
-        return isLocalhost ? LOCAL_API_URL : PROD_API_URL;
+    const configured = import.meta.env.VITE_API_URL?.trim();
+    if (configured && !/^(localhost|127\.0\.0\.1)/.test(configured)) {
+        return normalizeBaseUrl(configured);
     }
 
     return PROD_API_URL;
