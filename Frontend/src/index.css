@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:ital,wght@0,300..900;1,300..900&family=Baloo+2:wght@500..800&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&family=Caveat:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-cormorant: "Cormorant Garamond", serif;
+  --font-dm: "DM Sans", sans-serif;
+  --font-baloo: "Baloo 2", cursive;
+  --font-poppins: "Poppins", sans-serif;
+  --font-script: "Great Vibes", cursive;
+  --font-hand: "Caveat", cursive;
+
+  /* Bakejoy landing-page palette */
+  --color-bakejoy-coral: #F37966;
+  --color-bakejoy-coral-dark: #D05D4E;
+  --color-bakejoy-green: #5A1A2B;
+  --color-bakejoy-cream: #FFF6F0;
+  --color-bakejoy-peach: #F9E0D6;
+  --color-bakejoy-slate: #6B7280;
+}
+
+@utility stamp-edge {
+  mask-image: radial-gradient(circle at 12px 12px, transparent 11px, black 11.5px);
+  mask-size: 24px 24px;
+  mask-repeat: round;
+  -webkit-mask-image: radial-gradient(circle at 12px 12px, transparent 11px, black 11.5px);
+  -webkit-mask-size: 24px 24px;
+  -webkit-mask-repeat: round;
+}
+
+/* Shiny metallic-gold text — pairs with the Great Vibes script font in the hero. */
+@utility text-gold-shine {
+  background: linear-gradient(
+    135deg,
+    #a9772c 0%,
+    #f4d97b 18%,
+    #fff6cf 34%,
+    #e6b23c 50%,
+    #fff6cf 66%,
+    #f4d97b 82%,
+    #a9772c 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 5px rgba(60, 30, 0, 0.45));
+}
+
+/* Deeper metallic gold — legible on light cream/peach backgrounds (embossed look). */
+@utility text-gold-deep {
+  background: linear-gradient(
+    180deg,
+    #6b430c 0%,
+    #b9821c 26%,
+    #eab43c 50%,
+    #b9821c 74%,
+    #6b430c 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(60, 30, 0, 0.35));
+}
+
+/* Sparkling metallic-silver text — sweeps a bright highlight across the letters. */
+@keyframes silver-shimmer {
+  to { background-position: 200% center; }
+}
+@utility text-silver-shine {
+  background: linear-gradient(
+    100deg,
+    #8a8f96 0%,
+    #d7dbe0 18%,
+    #ffffff 30%,
+    #b9bfc7 46%,
+    #ffffff 62%,
+    #d7dbe0 78%,
+    #8a8f96 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+  animation: silver-shimmer 3.5s linear infinite;
+}
+
+/* Shimmering maroon text — the brand dark colour with a lighter rose highlight
+   sweeping across, matching the Landing palette. Reuses the silver-shimmer keyframe. */
+@utility text-maroon-shine {
+  background: linear-gradient(
+    100deg,
+    #5A1A2B 0%,
+    #7d2438 18%,
+    #b14a63 30%,
+    #5A1A2B 46%,
+    #b14a63 62%,
+    #7d2438 78%,
+    #5A1A2B 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 2px rgba(90, 26, 43, 0.25));
+  animation: silver-shimmer 3.5s linear infinite;
+}
+
+/* Shining animated metallic border — wrap around media as a glowing frame. */
+@keyframes shine-move {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+@utility shine-frame {
+  background: linear-gradient(
+    120deg,
+    #f4d97b,
+    #fff6cf,
+    #c0c0c0,
+    #ffffff,
+    #e6b23c,
+    #fff6cf,
+    #d7dbe0,
+    #f4d97b
+  );
+  background-size: 300% 300%;
+  animation: shine-move 4s linear infinite;
+}
+
+/* Wavy top+bottom crop — curves the media band inward like a ribbon. */
+@utility wave-mask {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 300' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,42 C240,86 480,4 720,42 C960,80 1200,8 1440,42 L1440,258 C1200,214 960,296 720,258 C480,220 240,292 0,258 Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 300' preserveAspectRatio='none'%3E%3Cpath fill='%23fff' d='M0,42 C240,86 480,4 720,42 C960,80 1200,8 1440,42 L1440,258 C1200,214 960,296 720,258 C480,220 240,292 0,258 Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Gentle vertical drift for the floating review cards around the store image. */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@utility float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* Continuous auto-scroll marquee — track holds two copies, shifts by half. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Single text orbiting clockwise around the store image like a train on curved tracks. */
+@keyframes orbit-clockwise {
+  from { offset-distance: 0%; }
+  to   { offset-distance: 100%; }
+}
+.store-orbit-text {
+  offset-path: rect(0% 100% 100% 0% round 40px);
+  offset-anchor: center center;
+  offset-rotate: auto;
+  animation: orbit-clockwise 18s linear infinite;
+}
+
+/* Little twinkling accent stars flanking a title. */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+@utility twinkle {
+  animation: twinkle 2.2s ease-in-out infinite;
+}
+
+/* Premium gold CTA button — metallic gold fill, dark text, glowing sheen. */
+@utility premium-gold-btn {
+  background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+  color: #3a2708;
+  border: 1px solid rgba(255, 246, 207, 0.9);
+  box-shadow:
+    0 10px 26px rgba(170, 119, 28, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.premium-gold-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 34px rgba(170, 119, 28, 0.65),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Premium silver CTA button — metallic silver fill, dark text, glowing sheen. */
+@utility premium-silver-btn {
+  background: linear-gradient(135deg, #8a8f96 0%, #e8ebee 25%, #ffffff 50%, #c3c8ce 75%, #9aa0a7 100%);
+  color: #2a2f36;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 10px 26px rgba(120, 130, 140, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.premium-silver-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 34px rgba(120, 130, 140, 0.65),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+/* Ticket / coupon shape: semicircular notches punched into the left & right edges. */
+@utility ticket-cut {
+  --notch: 18px;
+  -webkit-mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000) 0 0 / 50.5% 100% no-repeat,
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000) 100% 0 / 50.5% 100% no-repeat;
+  mask:
+    radial-gradient(var(--notch) at 0 50%, #0000 98%, #000) 0 0 / 50.5% 100% no-repeat,
+    radial-gradient(var(--notch) at 100% 50%, #0000 98%, #000) 100% 0 / 50.5% 100% no-repeat;
+}
+
+@utility sparkle {
+  position: absolute;
+  color: var(--color-bakejoy-coral);
+  opacity: 0.6;
+}
+
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* The <body> uses text-white, and Tailwind's preflight makes form controls
+   inherit color — which renders typed text white-on-white. Default form
+   fields to the dark brand color so input is always visible. Components can
+   still override with their own text-* utility classes. */
+input,
+textarea,
+select {
+  color: #5A1A2B;
+}
+
+/* Peach base for the whole app (the Landing contact section's colour), so no
+   page ever falls back to plain white behind its content. White cards keep
+   their contrast by using bg-white explicitly. */
+html,
+body {
+  background-color: #F9E0D6;
+}
